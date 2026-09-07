@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>IMPERIUM — создание сайтов и дизайн</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-top: #2A0E0C;
+    --bg-mid: #1B0B0A;
+    --bg-bottom: #0F0705;
+    --stone: #E9DCC3;
+    --stone-dim: #C9BB9C;
+    --ink: #F3E9D2;
+    --bronze: #C68A3B;
+    --bronze-light: #E0B368;
+    --line: rgba(198,138,59,0.35);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    color:var(--ink);
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-size:18px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1200px 700px at 50% -10%, rgba(198,138,59,0.16), transparent 60%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
+    background-attachment:fixed;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, transparent 2px, transparent 4px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, transparent 1px, transparent 3px);
+    pointer-events:none;
+    z-index:0;
+  }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3,.nav-name{ font-family:'Cinzel', Georgia, serif; }
+
+  .wrap{ max-width:1040px; margin:0 auto; padding:0 22px; position:relative; z-index:1; }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes floatY{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-14px); }
+  }
+  @keyframes floatYSlow{
+    0%, 100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-8px) rotate(0.6deg); }
+  }
+  @keyframes emberGlow{
+    0%, 100%{ opacity:0.5; }
+    50%{ opacity:0.9; }
+  }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  .meander{
+    height:14px; width:100%;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 6px,
+      var(--bronze) 6px, var(--bronze) 8px,
+      transparent 8px, transparent 14px,
+      var(--bronze) 14px, var(--bronze) 22px,
+      transparent 22px, transparent 28px
+    );
+    opacity:0.55; position:relative; z-index:1;
+  }
+
+  .nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(15,7,5,0.86);
+    backdrop-filter:saturate(160%) blur(14px);
+    -webkit-backdrop-filter:saturate(160%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1040px; margin:0 auto; padding:0 22px;
+    height:60px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-name{ font-size:17px; font-weight:700; letter-spacing:0.1em; color:var(--bronze-light); }
+  .nav-links{ display:flex; gap:28px; }
+  .nav-links a{
+    position:relative; font-size:14px; letter-spacing:0.03em;
+    color:var(--stone); transition:color .2s ease; padding-bottom:3px;
+    font-family:'Cinzel', Georgia, serif; font-weight:500;
+  }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:100%; height:1px;
+    background:var(--bronze-light); transform:scaleX(0); transform-origin:left;
+    transition:transform .25s ease;
+  }
+  .nav-links a:hover{ color:var(--bronze-light); }
+  .nav-links a:hover::after{ transform:scaleX(1); }
+
+  #hero{
+    padding:88px 22px 80px; text-align:center;
+    position:relative; overflow:hidden; isolation:isolate;
+  }
+  .col-full{
+    position:absolute; top:0; bottom:0; width:120px; opacity:0.5; z-index:0; pointer-events:none;
+  }
+  .col-full svg{ width:100%; height:100%; }
+  .col-full.left{ left:0; animation:floatY 9s ease-in-out infinite; }
+  .col-full.right{ right:0; animation:floatY 9s ease-in-out infinite; animation-delay:1.4s; }
+
+  .sun-emblem{
+    position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+    width:420px; height:420px; z-index:0; pointer-events:none;
+    background:radial-gradient(circle, rgba(224,179,104,0.22) 0%, transparent 65%);
+    animation:emberGlow 6s ease-in-out infinite;
+  }
+
+  .wreath-hero{
+    position:relative; z-index:1; width:220px; height:110px; margin:0 auto 4px;
+    opacity:0.9; animation:floatYSlow 8s ease-in-out infinite;
+  }
+  .eyebrow{
+    position:relative; z-index:1;
+    font-family:'Cinzel', Georgia, serif;
+    font-size:13px; letter-spacing:0.25em; text-transform:uppercase;
+    color:var(--bronze-light); margin-bottom:14px; font-weight:600;
+    opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.05s;
+  }
+  h1{
+    position:relative; z-index:1;
+    font-size:clamp(34px, 5.6vw, 54px); font-weight:700;
+    letter-spacing:0.01em; line-height:1.15; max-width:15ch; margin:0 auto;
+    color:var(--ink);
+    text-shadow:0 2px 18px rgba(198,138,59,0.25);
+    opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.2s;
+  }
+  .hero-sub{
+    position:relative; z-index:1;
+    margin:22px auto 0; max-width:42ch; font-size:21px;
+    font-style:italic; color:var(--stone-dim); line-height:1.5;
+    opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.35s;
+  }
+  .hero-ctas{
+    position:relative; z-index:1;
+    margin-top:34px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+    opacity:0; animation:fadeUp .8s ease forwards; animation-delay:.5s;
+  }
+  .btn-bronze{
+    font-family:'Cinzel', Georgia, serif; font-weight:600; letter-spacing:0.04em;
+    background:linear-gradient(135deg, var(--bronze-light), var(--bronze));
+    color:#241005; font-size:14px;
+    padding:14px 30px; border-radius:2px;
+    border:1px solid rgba(255,225,170,0.5);
+    transition:transform .2s ease, box-shadow .2s ease;
+    display:inline-block; position:relative; overflow:hidden;
+  }
+  .btn-bronze::after{
+    content:""; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform:skewX(-20deg); transition:left .6s ease;
+  }
+  .btn-bronze:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(198,138,59,0.35); }
+  .btn-bronze:hover::after{ left:130%; }
+  .btn-stone{
+    font-family:'Cinzel', Georgia, serif; font-weight:500; letter-spacing:0.04em;
+    background:rgba(233,220,195,0.05); color:var(--stone);
+    font-size:14px; padding:13px 30px; border-radius:2px;
+    border:1px solid var(--line);
+    transition:border-color .2s ease, color .2s ease, transform .2s ease;
+  }
+  .btn-stone:hover{ border-color:var(--bronze-light); color:var(--bronze-light); transform:translateY(-2px); }
+
+  section{ padding:80px 22px; scroll-margin-top:60px; position:relative; }
+  .section-eyebrow{
+    text-align:center; font-family:'Cinzel', Georgia, serif;
+    font-size:13px; font-weight:600; letter-spacing:0.22em;
+    color:var(--bronze-light); text-transform:uppercase; position:relative; z-index:1;
+  }
+  .section-title{
+    text-align:center; font-size:clamp(28px, 4vw, 40px); font-weight:700;
+    letter-spacing:0.01em; margin-top:10px; color:var(--ink); position:relative; z-index:1;
+  }
+  .section-sub{
+    text-align:center; max-width:46ch; margin:14px auto 0; color:var(--stone-dim);
+    font-size:19px; font-style:italic; position:relative; z-index:1;
+  }
+  .laurel-small{ width:110px; height:42px; margin:0 auto 6px; opacity:0.75; position:relative; z-index:1; }
+
+  #services{ background:rgba(0,0,0,0.18); }
+  .services-grid{
+    margin-top:52px; display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+    gap:26px; position:relative; z-index:1;
+  }
+  .service-card{
+    background:linear-gradient(180deg, rgba(233,220,195,0.06), rgba(233,220,195,0.02));
+    border:1px solid var(--line); border-radius:4px; padding:34px 28px;
+    position:relative; transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .service-card::before{
+    content:""; position:absolute; inset:6px; border:1px solid rgba(198,138,59,0.18); pointer-events:none;
+  }
+  .service-card:hover{
+    transform:translateY(-6px); border-color:var(--bronze-light);
+    box-shadow:0 18px 34px rgba(0,0,0,0.45), 0 0 0 1px rgba(198,138,59,0.2);
+  }
+  .service-icon{ width:44px; height:44px; margin-bottom:14px; opacity:0.9; }
+  .service-card h3{ font-size:23px; font-weight:600; color:var(--ink); }
+  .service-card p{ margin-top:10px; font-size:16px; color:var(--stone-dim); line-height:1.55; }
+
+  .about-grid{
+    margin-top:44px; max-width:660px; margin-left:auto; margin-right:auto; text-align:center;
+    position:relative; z-index:1;
+  }
+  .about-grid p{ font-size:20px; line-height:1.65; color:var(--stone); }
+  .about-grid p + p{ margin-top:16px; }
+  .facts{
+    margin-top:44px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+    max-width:660px; margin-left:auto; margin-right:auto; position:relative; z-index:1;
+  }
+  .fact{ text-align:center; border-top:1px solid var(--line); padding-top:14px; }
+  .fact-label{ font-size:12px; color:var(--stone-dim); text-transform:uppercase; letter-spacing:0.1em; font-family:'Cinzel', Georgia, serif; }
+  .fact-value{ margin-top:6px; font-size:18px; font-weight:600; color:var(--bronze-light); font-family:'Cinzel', Georgia, serif; }
+
+  #contact{ background:rgba(0,0,0,0.22); text-align:center; }
+  .contact-actions{ margin-top:38px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+  .contact-link{
+    background:rgba(233,220,195,0.04); border:1px solid var(--line); color:var(--stone);
+    font-size:15px; padding:13px 24px; border-radius:2px; font-family:'Cinzel', Georgia, serif;
+    transition:border-color .2s ease, transform .2s ease, color .2s ease; display:inline-block;
+  }
+  .contact-link:hover{ border-color:var(--bronze-light); color:var(--bronze-light); transform:translateY(-2px); }
+
+  footer{
+    padding:30px 22px; text-align:center; font-size:13px; color:var(--stone-dim);
+    position:relative; z-index:1; font-family:'Cinzel', Georgia, serif; letter-spacing:0.05em;
+  }
+
+  @media (max-width:760px){
+    .nav-links{ gap:16px; }
+    #hero{ padding:68px 20px 60px; }
+    section{ padding:60px 20px; }
+    .facts{ grid-template-columns:1fr; gap:22px; }
+    .hero-ctas{ flex-direction:column; }
+    .col-full{ width:60px; opacity:0.3; }
+    .wreath-hero{ width:160px; height:80px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
+    .eyebrow, h1, .hero-sub, .hero-ctas{ animation:none !important; opacity:1 !important; }
+    .reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+    .btn-bronze::after{ display:none; }
+    .col-full, .wreath-hero, .sun-emblem{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-name">IMPERIUM</div>
+    <div class="nav-links">
+      <a href="#services">Услуги</a>
+      <a href="#about">О нас</a>
+      <a href="#contact">Контакты</a>
+    </div>
+  </div>
+</nav>
+<div class="meander" aria-hidden="true"></div>
+
+<section id="hero">
+  <div class="sun-emblem" aria-hidden="true"></div>
+  <div class="col-full left" aria-hidden="true">
+    <svg viewBox="0 0 100 600" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16" y="0" width="68" height="16" stroke="#C68A3B" stroke-width="2"/>
+      <rect x="8" y="16" width="84" height="12" stroke="#C68A3B" stroke-width="2"/>
+      <line x1="24" y1="28" x2="24" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="36" y1="28" x2="36" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="48" y1="28" x2="48" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="60" y1="28" x2="60" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="72" y1="28" x2="72" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <rect x="8" y="560" width="84" height="12" stroke="#C68A3B" stroke-width="2"/>
+      <rect x="0" y="572" width="100" height="16" stroke="#C68A3B" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="col-full right" aria-hidden="true">
+    <svg viewBox="0 0 100 600" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16" y="0" width="68" height="16" stroke="#C68A3B" stroke-width="2"/>
+      <rect x="8" y="16" width="84" height="12" stroke="#C68A3B" stroke-width="2"/>
+      <line x1="24" y1="28" x2="24" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="36" y1="28" x2="36" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="48" y1="28" x2="48" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="60" y1="28" x2="60" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <line x1="72" y1="28" x2="72" y2="560" stroke="#C68A3B" stroke-width="1.6"/>
+      <rect x="8" y="560" width="84" height="12" stroke="#C68A3B" stroke-width="2"/>
+      <rect x="0" y="572" width="100" height="16" stroke="#C68A3B" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="wreath-hero" aria-hidden="true">
+    <svg viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M105 95C75 88 45 65 40 30" stroke="#E0B368" stroke-width="2"/>
+      <path d="M40 30l7 8M40 30l9-4M48 41l8 4M48 41l4-8M58 50l8 3M58 50l1-8M68 57l8 1M68 57l0-8M78 62l8 0M78 62l-1-8M88 65l7-1" stroke="#E0B368" stroke-width="1.5"/>
+      <path d="M115 95C145 88 175 65 180 30" stroke="#E0B368" stroke-width="2"/>
+      <path d="M180 30l-7 8M180 30l-9-4M172 41l-8 4M172 41l-4-8M162 50l-8 3M162 50l-1-8M152 57l-8 1M152 57l0-8M142 62l-8 0M142 62l1-8M132 65l-7-1" stroke="#E0B368" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <div class="eyebrow">Создание сайтов и дизайн</div>
+  <h1>IMPERIUM — сайты и дизайн, достойные империи</h1>
+  <p class="hero-sub">Разрабатываю сайты и визуальный стиль для тех, кому важны сила, характер и внимание к деталям.</p>
+  <div class="hero-ctas">
+    <a class="btn-bronze" href="#contact">Обсудить проект</a>
+    <a class="btn-stone" href="#services">Услуги</a>
+  </div>
+</section>
+
+<div class="meander" aria-hidden="true"></div>
+
+<section id="services">
+  <div class="wrap reveal">
+    <div class="section-eyebrow">Услуги</div>
+    <h2 class="section-title">Чем занимаюсь</h2>
+    <p class="section-sub">Полный цикл — от идеи и структуры до готового сайта.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 4l14 6v10c0 10-6 16-14 20-8-4-14-10-14-20V10z" stroke="#E0B368" stroke-width="1.8"/>
+          <path d="M22 4v36" stroke="#E0B368" stroke-width="1.2"/>
+        </svg>
+        <h3>Создание сайтов</h3>
+        <p>Лендинги, сайты-визитки и многостраничные сайты — с нуля, быстро и без лишней сложности.</p>
+      </div>
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 8h32M6 8v4a16 16 0 0032 0V8" stroke="#E0B368" stroke-width="1.8"/>
+          <path d="M22 24v10M16 38h12" stroke="#E0B368" stroke-width="1.8"/>
+        </svg>
+        <h3>Дизайн</h3>
+        <p>Визуальный стиль, макеты страниц, фирменные цвета и типографика под задачи бренда.</p>
+      </div>
+      <div class="service-card">
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 36L34 12M28 8l8 8M6 40l4-8 4 4z" stroke="#E0B368" stroke-width="1.8"/>
+        </svg>
+        <h3>Сопровождение</h3>
+        <p>Доработки, обновление контента и правки после запуска сайта.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="meander" aria-hidden="true"></div>
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="section-eyebrow">О проекте</div>
+    <div class="laurel-small" aria-hidden="true">
+      <svg viewBox="0 0 110 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M52 38C38 34 24 24 22 10" stroke="#E0B368" stroke-width="1.4"/>
+        <path d="M22 10l4 5M22 10l6-2M28 17l5 3M28 17l2-5" stroke="#E0B368" stroke-width="1"/>
+        <path d="M58 38C72 34 86 24 88 10" stroke="#E0B368" stroke-width="1.4"/>
+        <path d="M88 10l-4 5M88 10l-6-2M82 17l-5 3M82 17l-2-5" stroke="#E0B368" stroke-width="1"/>
+      </svg>
+    </div>
+    <h2 class="section-title">IMPERIUM</h2>
+    <div class="about-grid">
+      <p>IMPERIUM — это моя личная студия: я самостоятельно занимаюсь созданием сайтов и дизайном, от идеи до запуска.</p>
+      <p>Работаю аккуратно и вдумчиво — каждый проект собирается с вниманием к деталям, чтобы результат выглядел уверенно и профессионально.</p>
+    </div>
+    <div class="facts">
+      <div class="fact"><div class="fact-label">Формат</div><div class="fact-value">Сайты и дизайн</div></div>
+      <div class="fact"><div class="fact-label">Расположение</div><div class="fact-value">Москва</div></div>
+      <div class="fact"><div class="fact-label">Работа</div><div class="fact-value">Удалённо</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="meander" aria-hidden="true"></div>
+
+<section id="contact">
+  <div class="wrap reveal">
+    <div class="section-eyebrow">Контакты</div>
+    <h2 class="section-title">Обсудим ваш проект?</h2>
+    <p class="section-sub">Отвечаю в течение дня.</p>
+    <div class="contact-actions">
+      <a class="contact-link" href="mailto:sabr_way@mail.ru">✉ sabr_way@mail.ru</a>
+      <a class="contact-link" href="https://t.me/Sabr_way" target="_blank" rel="noopener">Telegram: @Sabr_way</a>
+      <a class="contact-link" href="https://vk.com/Sabr_way" target="_blank" rel="noopener">ВКонтакте: @Sabr_way</a>
+    </div>
+  </div>
+</section>
+
+<div class="meander" aria-hidden="true"></div>
+<footer>© 2026 IMPERIUM</footer>
+
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in-view'); });
+  }
+</script>
+
+</body>
+</html>
