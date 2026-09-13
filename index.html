@@ -319,7 +319,20 @@
     '1543877087-ebf71fde2be1',
     '1501265976582-c1e1b0bbaf63',
     '1496108493338-3b30de66f9be',
-    '1461783470466-185038239ee3'
+    '1461783470466-185038239ee3',
+    '1562239711-f353a425d023'
+  ];
+
+  var pixabayUrls = [
+    'https://cdn.pixabay.com/photo/2020/11/01/19/41/autumn-5704791_1280.jpg',
+    'https://cdn.pixabay.com/photo/2020/07/27/02/30/hands-5441201_1280.jpg',
+    'https://cdn.pixabay.com/photo/2020/11/08/09/41/deer-5723225_1280.jpg',
+    'https://cdn.pixabay.com/photo/2020/11/15/22/08/person-5747420_960_720.jpg',
+    'https://cdn.pixabay.com/photo/2020/09/27/04/15/cat-5605615_960_720.jpg',
+    'https://cdn.pixabay.com/photo/2020/03/14/21/56/wine-4931923_1280.jpg',
+    'https://cdn.pixabay.com/photo/2020/04/19/12/26/thread-5063401_1280.jpg',
+    'https://cdn.pixabay.com/photo/2020/07/11/11/34/mam-tor-5393685_1280.jpg',
+    'https://cdn.pixabay.com/photo/2020/07/03/14/43/waterdrops-5366584_1280.jpg'
   ];
 
   var revealObserver = new IntersectionObserver(function(entries){
@@ -380,11 +393,17 @@
     var wantsPhoto = Math.random() < 0.7;
 
     if (wantsPhoto) {
-      var pid = photoIds[Math.floor(Math.random() * photoIds.length)];
-      var crops = ['entropy', 'faces', 'edges', 'focalpoint'];
-      var crop = crops[Math.floor(Math.random() * crops.length)];
-      var photoUrl = 'https://images.unsplash.com/photo-' + pid +
-        '?auto=format&fit=crop&crop=' + crop + '&w=' + r[0] + '&h=' + r[1] + '&q=70';
+      var useUnsplash = Math.random() < 0.55;
+      var photoUrl;
+      if (useUnsplash) {
+        var pid = photoIds[Math.floor(Math.random() * photoIds.length)];
+        var crops = ['entropy', 'faces', 'edges', 'focalpoint'];
+        var crop = crops[Math.floor(Math.random() * crops.length)];
+        photoUrl = 'https://images.unsplash.com/photo-' + pid +
+          '?auto=format&fit=crop&crop=' + crop + '&w=' + r[0] + '&h=' + r[1] + '&q=70';
+      } else {
+        photoUrl = pixabayUrls[Math.floor(Math.random() * pixabayUrls.length)];
+      }
 
       var img = document.createElement('img');
       img.loading = 'lazy';
